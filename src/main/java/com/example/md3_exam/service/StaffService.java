@@ -103,27 +103,25 @@ public class StaffService {
         }
         return staff;
     }
-
-    public List<Staff> findByName(String a) {
+    public List<Staff> findByNameNew(String nameSearch) {
         List<Staff> staffList = new ArrayList<>();
         try {
             Connection connection = getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("select * from staff ");
+            PreparedStatement preparedStatement = connection.prepareStatement("select idStaff, name, email, address, phoneNumber, salary, idDepartment from staff where name like ?");
+            preparedStatement.setString(1, nameSearch);
             ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
+            while (rs.next()){
                 String name = rs.getString("name");
-                if (name.contains(a)) {
-                    int id = rs.getInt("idStaff");
-                    String email = rs.getString("email");
-                    String address = rs.getString("address");
-                    int phoneNumber = rs.getInt("phoneNumber");
-                    int salary = rs.getInt("salary");
-                    int idDepartment = rs.getInt("idDepartment");
-                    staffList.add(new Staff(id, name, email, address, phoneNumber, salary, idDepartment));
-                }
-
+                int id = rs.getInt("idStaff");
+                String email = rs.getString("email");
+                String address = rs.getString("address");
+                int phoneNumber = rs.getInt("phoneNumber");
+                int salary = rs.getInt("salary");
+                int idDepartment = rs.getInt("idDepartment");
+                staffList.add(new Staff(id, name, email, address, phoneNumber, salary, idDepartment));
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e){
             e.printStackTrace();
         }
         return staffList;

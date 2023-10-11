@@ -3,11 +3,9 @@
 <html>
 <head>
     <title>JSP - Hello World</title>
+
 </head>
 <body>
-<h1><%= "Hello C0623K1!" %>
-</h1>
-<br/>
-<a href="StaffServlet">Exam MD3</a>
+<a href="UserServlet?action=login">Login</a>
 </body>
 </html>

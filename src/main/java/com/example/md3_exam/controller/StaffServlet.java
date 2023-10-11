@@ -44,7 +44,7 @@ public class StaffServlet extends HttpServlet {
     }
 
     private void showAllStaff(HttpServletRequest request, HttpServletResponse response) {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("listStaff.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("homePage.jsp");
         List<Staff> staffList = staffService.displayAll();
         List<Department> departmentList = findAllDepartment(staffList);
         request.setAttribute("staffList", staffList);
@@ -63,7 +63,7 @@ public class StaffServlet extends HttpServlet {
         staffService.delete(id);
         List<Staff> staffList = staffService.displayAll();
         request.setAttribute("staffList", staffList);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("listStaff.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("homePage.jsp");
         try {
             dispatcher.forward(request, response);
         } catch (ServletException e) {
@@ -76,10 +76,12 @@ public class StaffServlet extends HttpServlet {
     private void showUpdateStaff(HttpServletRequest request, HttpServletResponse response) throws SQLException {
         int id = Integer.parseInt(request.getParameter("idStaff"));
         Staff staff = staffService.findById(id);
+        List<Department> departmentList = departmentService.displayAll();
         RequestDispatcher dispatcher;
         if(staff == null){
             dispatcher = request.getRequestDispatcher("error-404.jsp");
         }else {
+            request.setAttribute("departmentList", departmentList);
             request.setAttribute("staff", staff);
             dispatcher = request.getRequestDispatcher("updateStaff.jsp");
         }
@@ -131,7 +133,9 @@ public class StaffServlet extends HttpServlet {
     }
     private void findByName(HttpServletRequest request, HttpServletResponse response) {
         String a = request.getParameter("nameSearch");
-        List<Staff> staffList = staffService.findByName(a);
+        List<Staff> staffList = staffService.findByNameNew(a);
+        List<Department> departmentList = findAllDepartment(staffList);
+        request.setAttribute("departmentList", departmentList);
         request.setAttribute("staffByName", staffList);
         RequestDispatcher dispatcher = request.getRequestDispatcher("viewFindByName.jsp");
         try {
